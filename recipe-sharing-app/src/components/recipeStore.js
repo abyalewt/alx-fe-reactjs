@@ -4,8 +4,11 @@ const useRecipeStore = create((set) => ({
   recipes: [],
   searchTerm: "",
   filteredRecipes: [],
+  // New State for Task 3
+  favorites: [],
+  recommendations: [],
 
-  // Existing actions
+  // --- Recipe Management ---
   addRecipe: (newRecipe) =>
     set((state) => {
       const updatedRecipes = [...state.recipes, newRecipe];
@@ -22,7 +25,7 @@ const useRecipeStore = create((set) => ({
       ),
     })),
 
-  // New Search Actions
+  // --- Search Actions ---
   setSearchTerm: (term) => set({ searchTerm: term }),
 
   filterRecipes: () =>
@@ -35,6 +38,28 @@ const useRecipeStore = create((set) => ({
             .includes(state.searchTerm.toLowerCase()),
       ),
     })),
+
+  // --- Favorites Actions ---
+  addFavorite: (recipeId) =>
+    set((state) => ({
+      favorites: [...state.favorites, recipeId],
+    })),
+
+  removeFavorite: (recipeId) =>
+    set((state) => ({
+      favorites: state.favorites.filter((id) => id !== recipeId),
+    })),
+
+  // --- Recommendations Action ---
+  generateRecommendations: () =>
+    set((state) => {
+      // Logic: Recommend recipes that are NOT in favorites
+      // This mocks a simple recommendation engine
+      const recommended = state.recipes.filter(
+        (recipe) => !state.favorites.includes(recipe.id) && Math.random() > 0.4,
+      );
+      return { recommendations: recommended };
+    }),
 }));
 
 export { useRecipeStore };
